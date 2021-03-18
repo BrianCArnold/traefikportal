@@ -8,7 +8,7 @@ import { DashboardItem } from './dashboard-item';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  siteGroups: { [groupName: string]: DashboardItem[] } = {};
+  siteGroups: { [groupName: string]: { typeColor: string, textColor: string, items: DashboardItem[] } }= {};
   siteGroupNames: string[] = [];
 
 
@@ -16,12 +16,16 @@ export class AppComponent implements OnInit {
 
   }
   async ngOnInit(): Promise<void> {
+    setInterval(() => this.populateSites().then(), 5000);
+  }
+  async populateSites(): Promise<void> {
     var sites: DashboardItem[] = await this.client.get<DashboardItem[]>('/api/Endpoints').toPromise();
     this.siteGroupNames = sites.map(s => s.name.split(' ')[0].trim()).filter((v,i,a) => a.indexOf(v) == i);
     this.siteGroups = {};
-    this.siteGroupNames.forEach(n => {
-      this.siteGroups[n] = sites.filter(s => s.name.startsWith(n)).map(s => ({ name: s.name.replace(n,'').trim(), url: s.url }));
-    })
+    var siteBackgrounds = ['primary', 'success', 'danger', 'secondary'];
+    this.siteGroupNames.forEach((n,i) => {
+      this.siteGroups[n] = { typeColor: siteBackgrounds[i], textColor: 'white', items: sites.filter(s => s.name.startsWith(n)).map(s => ({ name: s.name.replace(n,'').trim(), url: s.url })) };
+    });
   }
   title = 'ClientApp';
 }
