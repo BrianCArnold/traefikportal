@@ -16,7 +16,8 @@ export class AppComponent implements OnInit {
 
   }
   async ngOnInit(): Promise<void> {
-    setInterval(() => this.populateSites().then(), 5000);
+    await this.populateSites();
+    setInterval(async () => await this.populateSites(), 5000);
   }
   async populateSites(): Promise<void> {
     var sites: DashboardItem[] = await this.client.get<DashboardItem[]>('/api/Endpoints').toPromise();
