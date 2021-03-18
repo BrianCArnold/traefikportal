@@ -1,19 +1,21 @@
 
-<div  class="container">
-  <div class="m-3 p-3">
-    <div class="row">
-      <div *ngFor="let group of siteGroupNames;" class="col-lg-4 col-md-6 col-sm-12 mb-3">
-        <div class="card">
-          <div class="card-header">
-            <h1>{{group}}</h1>
-          </div>
-          <div class="card-body">
-            <div *ngFor="let item of siteGroups[group]" class="card">
-              <div class="card-header">
-                {{item.name}}
-              </div>
-              <div class="card-body">
-                <a [href]="item.url">{{item.url}}</a>
+<div class="row pl-3 py-3 mr-0">
+  <div *ngFor="let group of siteGroupNames;" class="col-xl-6 col-12">
+    <div class="card mb-3">
+      <div class="card-header" [ngClass]="'bg-' + siteGroups[group].typeColor + ' text-' + siteGroups[group].textColor">
+        <h1>{{group}}</h1>
+      </div>
+      <div class="card-body">
+        <div class="m-1 p-1">
+          <div class="row">
+            <div *ngFor="let item of siteGroups[group].items" class="col-lg-4 col-xl-6 col-md-12 col-sm-12 mb-3">
+              <div class="card" [ngClass]="'border-' + siteGroups[group].typeColor">
+                <div class="card-header">
+                  {{item.name}}
+                </div>
+                <div class="card-body">
+                  <a [href]="item.url" target="_blank">{{item.url.replace('https://','')}}</a>
+                </div>
               </div>
             </div>
           </div>
@@ -21,6 +23,7 @@
       </div>
     </div>
   </div>
-
 </div>
+
+
 <router-outlet></router-outlet>
