@@ -16,11 +16,11 @@ export class AppComponent implements OnInit {
 
   }
   async ngOnInit(): Promise<void> {
-    var sites = await this.client.get<DashboardItem[]>('/api/Endpoints').toPromise();
-    this.siteGroupNames = sites.map(s => s.name.split('')[0]).filter((v,i,a) => a.indexOf(v) == i);
+    var sites: DashboardItem[] = await this.client.get<DashboardItem[]>('/api/Endpoints').toPromise();
+    this.siteGroupNames = sites.map(s => s.name.split(' ')[0].trim()).filter((v,i,a) => a.indexOf(v) == i);
     this.siteGroups = {};
     this.siteGroupNames.forEach(n => {
-      this.siteGroups[n] = sites.filter(s => s.name.startsWith(n)).map(s => ({ name: s.name.replace(n+ ' ',''), url: s.url }));
+      this.siteGroups[n] = sites.filter(s => s.name.startsWith(n)).map(s => ({ name: s.name.replace(n,'').trim(), url: s.url }));
     })
   }
   title = 'ClientApp';
